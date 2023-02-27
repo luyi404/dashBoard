@@ -10,6 +10,10 @@ import generalRoutes from "./routes/general.js"
 import managementRoutes from "./routes/management.js"
 import salesRoutes from "./routes/sales.js"
 
+// data imports
+import User from "./models/User.js"
+import { dataUser } from "./data/index.js";
+
 /* CONFIGURATION */
 dotenv.config();
 const app = express();
@@ -29,11 +33,20 @@ app.use("sales", salesRoutes);
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 9000;
-mongoose.connect(process.env.MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => {
-    app.listen(PORT, () => {
-        console.log(`Server Port: ${PORT}`);
+mongoose
+    .connect(process.env.MONGO_URL, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
     })
-}).catch((error) => console.log(`${error} did not connect!`))
+    .then(() => {
+        app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
+
+        /* ONLY ADD DATA ONE TIME */
+        // AffiliateStat.insertMany(dataAffiliateStat);
+        // OverallStat.insertMany(dataOverallStat);
+        // Product.insertMany(dataProduct);
+        // ProductStat.insertMany(dataProductStat);
+        // Transaction.insertMany(dataTransaction);
+        // User.insertMany(dataUser);
+    })
+    .catch((error) => console.log(`${error} did not connect`));
